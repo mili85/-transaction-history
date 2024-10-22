@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سابقه تراکنش‌ها</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #555;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>12</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>15.05.2024</th>
+                <th></th>
+                <th>0xD770BfD23de0c8F57EdF840b6a29eB52B0363508</th>
+                <th>2.455151 (WBTC)</th>
+            </tr>
+        </thead>
+        <tbody id="transactions">
+            <!-- تراکنش‌ها در اینجا اضافه می‌شوند -->
+        </tbody>
+    </table>
+    <script>
+        const apiKey = 'YOUR_API_KEY'; // RYJP77HG79E5F3HYDIDR1SFYSVCV5X1E6G
+        const address = '0xYOUR_ADDRESS'; // Oxf61961270d686c971b249566
+e7a3d82e5c/dd737
+
+        async function fetchTransactions() {
+            try {
+                const response = await fetch(`https://api.etherscan.io/api?module=account&action=tokentx&address=${address}&startblock=0&endblock=99999999&sort=desc&apikey=${apiKey}`);
+                const data = await response.json();
+                
+                if (data.status === "1") {
+                    const transactions = data.result.filter(tx => tx.tokenSymbol === 'WBTC');
+                    displayTransactions(transactions);
+                } else {
+                    console.error('Error fetching data:', data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function displayTransactions(transactions) {
+            const tbody = document.getElementById('transactions');
+
+            transactions.forEach(tx => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${new Date(tx.timeStamp * 1000).toLocaleString()}</td>
+                    <td>${tx.from}</td>
+                    <td>${tx.to}</td>
+                    <td>${(tx.value / Math.pow(10, 8)).toFixed(4)} WBTC</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        fetchTransactions();
+    </script>
+</body>
+</html>
